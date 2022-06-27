@@ -8,10 +8,11 @@ from saving_data import saving_table_now, create_db_now, saving_table_start, sav
     saving_table_end, create_db_end, delete_data_now_start
 import requests
 
-host = 'localhost'
-user = 'root'
-passwd = '123456'
+host = '175.178.14.211'
+user = 'lottery_500_2'
+passwd = '698350As?'
 port = 3306
+mydb = 'lottery_500_2'
 
 headers = {'User-Agent': 'Baiduspider'}
 current_time_ticks = int(time.time())
@@ -81,7 +82,7 @@ def get_end_data():
     response.encoding = 'GBK'
     html = response.text
     tds = etree.HTML(html).xpath('//table[@id="table_match"]/tbody/tr')
-    db = pymysql.connect(host=host, user=user, passwd=passwd, port=port, db='lottery')
+    db = pymysql.connect(host=host, user=user, passwd=passwd, port=port, db=mydb)
     cursor = db.cursor()
     for td in tds:
         start = str(datetime.now())  # 当前系统时间

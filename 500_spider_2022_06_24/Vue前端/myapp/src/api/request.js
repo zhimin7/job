@@ -13,9 +13,7 @@ service.interceptors.request.use(
       config.headers.Authorization = localStorage.getItem("token");
     return config;
   },
-  (error) => {
-    return Promise.reject(new Error(error));
-  }
+  
 );
 
 // 响应请求拦截器
@@ -30,9 +28,6 @@ service.interceptors.response.use(
       return Promise.reject(new Error(meta.meta[0].msg));
     }
   },
-  (error) => {
-    error.response && ElMessage.error(error.response.data);
-    return Promise.reject(new Error(error.response.data));
-  }
+  
 );
 export default service;

@@ -1,14 +1,15 @@
 import pymysql
 import time
 from datetime import datetime
-host = 'localhost'
-user = 'root'
-passwd = '123456'
+host = '175.178.14.211'
+user = 'lottery_500_2'
+passwd = '698350As?'
 port = 3306
+mydb = 'lottery_500_2'
 
 # 查询定时爬虫的数据
 def find_GamesData(mytime):
-    db = pymysql.connect(host=host, user=user, passwd=passwd, port=port, db='lottery')
+    db = pymysql.connect(host=host, user=user, passwd=passwd, port=port, db=mydb)
     cursor = db.cursor()
     if mytime==[]:
         now_times = (str(datetime.now())[:10])
@@ -36,7 +37,7 @@ def find_GamesData(mytime):
 
 # 查询手动启动爬虫数据
 def find_GamesData_spider(mytime):
-    db = pymysql.connect(host=host, user=user, passwd=passwd, port=port, db='lottery')
+    db = pymysql.connect(host=host, user=user, passwd=passwd, port=port, db=mydb)
     cursor = db.cursor()
     if mytime==[]:
         sql = 'select fid, gamestime,delayed_time,spider_time,home_team,score,away_team,handicap,All_companies,BiFa,Matchbook,Leon,Betsson,mainstream_companines_3,mainstream_companines_1,Exchange from now_data_start GROUP BY fid, gamestime,delayed_time,spider_time,home_team,score,away_team,handicap,All_companies,BiFa,Matchbook,Leon,Betsson,mainstream_companines_3,mainstream_companines_1,Exchange order by gamestime ,fid,spider_time  ;'
@@ -58,7 +59,7 @@ def find_GamesData_spider(mytime):
 
 # 查询即时比赛的数据
 def find_immediateData(mytime):
-    db = pymysql.connect(host=host, user=user, passwd=passwd, port=port, db='lottery')
+    db = pymysql.connect(host=host, user=user, passwd=passwd, port=port, db=mydb)
     cursor = db.cursor()
     if mytime==[]:
         now_times = (str(datetime.now())[:10])
@@ -85,7 +86,7 @@ def find_immediateData(mytime):
 
 # 查询比赛前30分钟的数据
 def find_front30Data(mytime):
-    db = pymysql.connect(host=host, user=user, passwd=passwd, port=port, db='lottery')
+    db = pymysql.connect(host=host, user=user, passwd=passwd, port=port, db=mydb)
     cursor = db.cursor()
     if mytime==[]:
         now_times = (str(datetime.now())[:10])
@@ -113,7 +114,7 @@ def find_front30Data(mytime):
 
 # 查询比赛前1小时的数据
 def find_front1Data(mytime):
-    db = pymysql.connect(host=host, user=user, passwd=passwd, port=port, db='lottery')
+    db = pymysql.connect(host=host, user=user, passwd=passwd, port=port, db=mydb)
     cursor = db.cursor()
     if mytime==[]:
         now_times = (str(datetime.now())[:10])
@@ -141,7 +142,7 @@ def find_front1Data(mytime):
 
 # 查询比赛前3小时的数据
 def find_front3Data(mytime):
-    db = pymysql.connect(host=host, user=user, passwd=passwd, port=port, db='lottery')
+    db = pymysql.connect(host=host, user=user, passwd=passwd, port=port, db=mydb)
     cursor = db.cursor()
     if mytime==[]:
         now_times = (str(datetime.now())[:10])
@@ -168,7 +169,7 @@ def find_front3Data(mytime):
 
 # 查询比赛前5小时的数据
 def find_front5Data(mytime):
-    db = pymysql.connect(host=host, user=user, passwd=passwd, port=port, db='lottery')
+    db = pymysql.connect(host=host, user=user, passwd=passwd, port=port, db=mydb)
     cursor = db.cursor()
     if mytime==[]:
         now_times = (str(datetime.now())[:10])
@@ -195,7 +196,7 @@ def find_front5Data(mytime):
 
 # 查询比赛结束的数据
 def find_endData(mytime):
-    db = pymysql.connect(host=host, user=user, passwd=passwd, port=port, db='lottery')
+    db = pymysql.connect(host=host, user=user, passwd=passwd, port=port, db=mydb)
     cursor = db.cursor()
     if mytime==[]:
         now_times = (str(datetime.now())[:10])
@@ -222,7 +223,7 @@ def find_endData(mytime):
 
 # 登录验证
 def find_loginuser(username, password):
-    db = pymysql.connect(host=host, user=user, passwd=passwd, port=port, db='lottery')
+    db = pymysql.connect(host=host, user=user, passwd=passwd, port=port, db=mydb)
     cursor = db.cursor()
     sql = f'select * from usertable where  username="{username}" and password="{password}";'
     cursor.execute(sql)
