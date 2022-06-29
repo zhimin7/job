@@ -1,10 +1,11 @@
 import pymysql
 
-host = 'localhost'
-user = 'root'
-passwd = '123456'
+host = '175.178.14.211'
+user = 'lottery_500_2'
+passwd = '698350As?'
 port = 3306
-mydb='lottery'
+mydb = 'lottery_500_2'
+
 
 ################################保存即时比赛数据################################
 # 创建数据库

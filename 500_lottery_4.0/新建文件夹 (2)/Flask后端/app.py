@@ -156,4 +156,4 @@ def login():
 # scheduler.add_job(func=get_match_data, id='1', trigger='cron', minute ='00,05,10,15,20,25,30,35,40,45,50,55')
 # scheduler.start()
 if __name__ == '__main__':
-    app.run(debug=False,port=5000)
+    app.run(debug=False,port=9000, host='0.0.0.0')

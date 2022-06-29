@@ -1,11 +1,11 @@
 import pymysql
 import time
 from datetime import datetime
-host = 'localhost'
-user = 'root'
-passwd = '123456'
+host = '175.178.14.211'
+user = 'lottery_500_2'
+passwd = '698350As?'
 port = 3306
-mydb='lottery'
+mydb = 'lottery_500_2'
 # 查询定时爬虫的数据
 def find_GamesData(mytime):
     db = pymysql.connect(host=host, user=user, passwd=passwd, port=port, db=mydb)
