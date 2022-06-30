@@ -2,8 +2,8 @@
   <div>
     <el-card>
       <div>
-        <label>即时比赛数据展示：</label
-        ><el-date-picker
+        <label>历史数据展示：</label>
+        <el-date-picker
           v-model="queryForm.value1"
           type="daterange"
           range-separator="To"
@@ -14,7 +14,7 @@
         <el-button
           type="primary"
           :icon="Search"
-          @click="findGamesDataSpiderList"
+          @click="initgetGamesDataList"
           class="date-picker"
           >查询</el-button
         >
@@ -25,6 +25,7 @@
           @click="deriveExcel"
           >下载数据</el-button
         >
+
         <el-dropdown class="logout">
           <span class="el-dropdown-link">
             <el-avatar shape="square" :size="40" :src="squareUrl" />
@@ -53,32 +54,19 @@
 
 <script setup>
 import { options } from "../js/options";
-import { find_immediateData } from "@/api/getdata.js";
 import { ref, reactive } from "vue";
 import { Search, Download } from "@element-plus/icons-vue";
+import XLSX from "xlsx";
 import ExportJsonExcel from "js-export-excel";
 import { useStore } from "vuex";
-import router from "@/router";
+import { find_data } from "@/api/getdata.js";
 
 const store = useStore();
 // 初始化表格数据
 const tableData = ref([]);
-const queryForm = ref({
-  query: "",
-  pagenum: 1,
-  pagesize: 2,
-  value1: "",
-});
-
-// 查询数据
-const findGamesDataSpiderList = async () => {
-  const res = await find_immediateData(queryForm.value);
-  tableData.value = res.data;
-};
-findGamesDataSpiderList();
-// 设置定时刷新数据
-// setInterval(findGamesDataSpiderList, 5000);
-
+const squareUrl = ref(
+  "https://img0.baidu.com/it/u=1056811702,4111096278&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500"
+);
 // 下载数据的文件名
 const state = reactive({
   date: "",
@@ -94,8 +82,9 @@ let minutes = myDate.getMinutes().toString().padStart(2, "0");
 let seconed = myDate.getSeconds().toString().padStart(2, "0");
 state.date = myDate.getFullYear() + "-" + month + "-" + day;
 state.time = hour + "时" + minutes;
+
 const deriveExcel = async () => {
-  const res = await find_immediateData(queryForm.value);
+  const res = await find_data(queryForm.value);
   const dataList = res.data;
   let option = {};
   let dataTable = [];
@@ -120,7 +109,7 @@ const deriveExcel = async () => {
     }
   }
   const filename =
-    "500彩票-即时比赛数据-" + state.date + " " + state.time + "分.xlsx";
+    "500彩票-比赛历史数据-" + state.date + " " + state.time + "分.xlsx";
   option.fileName = filename;
   option.datas = [
     {
@@ -161,6 +150,23 @@ const deriveExcel = async () => {
   let toExcel = new ExportJsonExcel(option);
   toExcel.saveExcel();
 };
+
+// 发送查询请求或下载请求的参数
+const queryForm = ref({
+  query: "",
+  pagenum: 1,
+  pagesize: 2,
+  value1: "",
+});
+
+// 查询数据
+const initgetGamesDataList = async () => {
+  const res = await find_data(queryForm.value);
+  tableData.value = res.data;
+};
+initgetGamesDataList();
+// 设置定时查询数据
+setInterval(initgetGamesDataList, 5000);
 
 // 退出登录
 const logout = () => {

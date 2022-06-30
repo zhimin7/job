@@ -2,7 +2,7 @@
   <div>
     <el-card>
       <div>
-        <label>比赛结束数据展示：</label
+        <label>比赛前5小时数据展示：</label
         ><el-date-picker
           v-model="queryForm.value1"
           type="daterange"
@@ -36,7 +36,7 @@
           </template>
         </el-dropdown>
       </div>
-      <el-table :data="tableData" height="450px" style="width: 100%" id="table">
+      <el-table :data="tableData" height="430px" style="width: 100%" id="table">
         <el-table-column
           :width="item.width"
           :prop="item.prop"
@@ -53,7 +53,7 @@
 
 <script setup>
 import { options } from "../js/options";
-import { find_end } from "@/api/getdata.js";
+import { find_front5 } from "@/api/getdata.js";
 import { ref, reactive } from "vue";
 import { Search, Download } from "@element-plus/icons-vue";
 import ExportJsonExcel from "js-export-excel";
@@ -72,12 +72,12 @@ const queryForm = ref({
 
 // 查询数据
 const findGamesDataSpiderList = async () => {
-  const res = await find_end(queryForm.value);
+  const res = await find_front5(queryForm.value);
   tableData.value = res.data;
 };
 findGamesDataSpiderList();
 // 设置定时刷新数据
-// setInterval(findGamesDataSpiderList, 5000);
+setInterval(findGamesDataSpiderList, 5000);
 
 // 下载数据的文件名
 const state = reactive({
@@ -95,7 +95,7 @@ let seconed = myDate.getSeconds().toString().padStart(2, "0");
 state.date = myDate.getFullYear() + "-" + month + "-" + day;
 state.time = hour + "时" + minutes;
 const deriveExcel = async () => {
-  const res = await find_end(queryForm.value);
+  const res = await find_front5(queryForm.value);
   const dataList = res.data;
   let option = {};
   let dataTable = [];
@@ -120,7 +120,7 @@ const deriveExcel = async () => {
     }
   }
   const filename =
-    "500彩票-比赛结束数据-" + state.date + " " + state.time + "分";
+    "500彩票-比赛前5小时数据-" + state.date + " " + state.time + "分.xlsx";
   option.fileName = filename;
   option.datas = [
     {
@@ -174,6 +174,6 @@ const logout = () => {
   margin-left: 20px;
 }
 .logout {
-  margin-left: 400px;
+  margin-left: 500px;
 }
 </style>

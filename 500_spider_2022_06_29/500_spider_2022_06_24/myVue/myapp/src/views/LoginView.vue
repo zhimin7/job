@@ -28,8 +28,8 @@ import { useStore } from "vuex";
 const store = useStore();
 // 登录表单，用户名和密码
 const form = ref({
-  username: "张三",
-  password: "123456",
+  username: "",
+  password: "",
 });
 const rules = ref({
   username: [{ required: true, message: "请输入用户名", trigger: "blur" }],

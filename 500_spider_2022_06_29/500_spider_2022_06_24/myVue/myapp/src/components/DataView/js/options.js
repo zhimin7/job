@@ -12,7 +12,7 @@ export const options = [
   {
     label: "score",
     prop: "score",
-    width: "180",
+    width: "120",
   },
   {
     label: "away_team",

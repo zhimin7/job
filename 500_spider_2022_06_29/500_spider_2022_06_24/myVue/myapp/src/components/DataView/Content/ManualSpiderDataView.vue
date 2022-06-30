@@ -2,7 +2,7 @@
   <div>
     <el-card>
       <div>
-        <label>比赛前1小时数据展示：</label
+        <label>手动启动爬虫数据展示：</label
         ><el-date-picker
           v-model="queryForm.value1"
           type="daterange"
@@ -17,6 +17,13 @@
           @click="findGamesDataSpiderList"
           class="date-picker"
           >查询</el-button
+        >
+        <el-button
+          type="primary"
+          :icon="Tools"
+          class="date-picker"
+          @click="start_spider"
+          >启动</el-button
         >
         <el-button
           type="primary"
@@ -53,12 +60,12 @@
 
 <script setup>
 import { options } from "../js/options";
-import { find_front1 } from "@/api/getdata.js";
+import { find_Spider_data, startSpider } from "@/api/getdata.js";
 import { ref, reactive } from "vue";
-import { Search, Download } from "@element-plus/icons-vue";
+import { Search, Download, Tools } from "@element-plus/icons-vue";
 import ExportJsonExcel from "js-export-excel";
 import { useStore } from "vuex";
-import router from "@/router";
+import { ElMessage } from "element-plus";
 
 const store = useStore();
 // 初始化表格数据
@@ -72,12 +79,12 @@ const queryForm = ref({
 
 // 查询数据
 const findGamesDataSpiderList = async () => {
-  const res = await find_front1(queryForm.value);
+  const res = await find_Spider_data(queryForm.value);
   tableData.value = res.data;
 };
 findGamesDataSpiderList();
 // 设置定时刷新数据
-// setInterval(findGamesDataSpiderList, 5000);
+setInterval(findGamesDataSpiderList, 5000);
 
 // 下载数据的文件名
 const state = reactive({
@@ -95,7 +102,7 @@ let seconed = myDate.getSeconds().toString().padStart(2, "0");
 state.date = myDate.getFullYear() + "-" + month + "-" + day;
 state.time = hour + "时" + minutes;
 const deriveExcel = async () => {
-  const res = await find_front1(queryForm.value);
+  const res = await find_Spider_data(queryForm.value);
   const dataList = res.data;
   let option = {};
   let dataTable = [];
@@ -120,7 +127,7 @@ const deriveExcel = async () => {
     }
   }
   const filename =
-    "500彩票-比赛前1小时数据-" + state.date + " " + state.time + "分.xlsx";
+    "500彩票-实时启动爬虫数据-" + state.date + " " + state.time + "分.xlsx";
   option.fileName = filename;
   option.datas = [
     {
@@ -161,7 +168,14 @@ const deriveExcel = async () => {
   let toExcel = new ExportJsonExcel(option);
   toExcel.saveExcel();
 };
-
+// 启动爬虫
+const start_spider = async () => {
+  ElMessage({
+    message: "正在爬取数据......",
+    type: "success",
+  });
+  await startSpider();
+};
 // 退出登录
 const logout = () => {
   store.dispatch("app/logout");

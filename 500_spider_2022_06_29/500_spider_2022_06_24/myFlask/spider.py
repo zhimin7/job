@@ -13,7 +13,6 @@ user = 'lottery_500_2'
 passwd = '698350As?'
 port = 3306
 mydb = 'lottery_500_2'
-
 headers = {'User-Agent': 'Baiduspider'}
 current_time_ticks = int(time.time())
 temp = {}

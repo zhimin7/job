@@ -77,7 +77,7 @@ const findGamesDataSpiderList = async () => {
 };
 findGamesDataSpiderList();
 // 设置定时刷新数据
-// setInterval(findGamesDataSpiderList, 5000);
+setInterval(findGamesDataSpiderList, 5000);
 
 // 下载数据的文件名
 const state = reactive({

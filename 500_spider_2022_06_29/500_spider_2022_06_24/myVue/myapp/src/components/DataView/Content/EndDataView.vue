@@ -2,8 +2,8 @@
   <div>
     <el-card>
       <div>
-        <label>历史数据展示：</label>
-        <el-date-picker
+        <label>比赛结束数据展示：</label
+        ><el-date-picker
           v-model="queryForm.value1"
           type="daterange"
           range-separator="To"
@@ -14,7 +14,7 @@
         <el-button
           type="primary"
           :icon="Search"
-          @click="initgetGamesDataList"
+          @click="findGamesDataSpiderList"
           class="date-picker"
           >查询</el-button
         >
@@ -25,7 +25,6 @@
           @click="deriveExcel"
           >下载数据</el-button
         >
-
         <el-dropdown class="logout">
           <span class="el-dropdown-link">
             <el-avatar shape="square" :size="40" :src="squareUrl" />
@@ -37,7 +36,7 @@
           </template>
         </el-dropdown>
       </div>
-      <el-table :data="tableData" height="430px" style="width: 100%" id="table">
+      <el-table :data="tableData" height="450px" style="width: 100%" id="table">
         <el-table-column
           :width="item.width"
           :prop="item.prop"
@@ -54,19 +53,32 @@
 
 <script setup>
 import { options } from "../js/options";
+import { find_end } from "@/api/getdata.js";
 import { ref, reactive } from "vue";
 import { Search, Download } from "@element-plus/icons-vue";
-import XLSX from "xlsx";
 import ExportJsonExcel from "js-export-excel";
 import { useStore } from "vuex";
-import { find_data } from "@/api/getdata.js";
+import router from "@/router";
 
 const store = useStore();
 // 初始化表格数据
 const tableData = ref([]);
-const squareUrl = ref(
-  "https://img0.baidu.com/it/u=1056811702,4111096278&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500"
-);
+const queryForm = ref({
+  query: "",
+  pagenum: 1,
+  pagesize: 2,
+  value1: "",
+});
+
+// 查询数据
+const findGamesDataSpiderList = async () => {
+  const res = await find_end(queryForm.value);
+  tableData.value = res.data;
+};
+findGamesDataSpiderList();
+// 设置定时刷新数据
+setInterval(findGamesDataSpiderList, 5000);
+
 // 下载数据的文件名
 const state = reactive({
   date: "",
@@ -82,9 +94,8 @@ let minutes = myDate.getMinutes().toString().padStart(2, "0");
 let seconed = myDate.getSeconds().toString().padStart(2, "0");
 state.date = myDate.getFullYear() + "-" + month + "-" + day;
 state.time = hour + "时" + minutes;
-
 const deriveExcel = async () => {
-  const res = await find_data(queryForm.value);
+  const res = await find_end(queryForm.value);
   const dataList = res.data;
   let option = {};
   let dataTable = [];
@@ -109,7 +120,7 @@ const deriveExcel = async () => {
     }
   }
   const filename =
-    "500彩票-比赛历史数据-" + state.date + " " + state.time + "分.xlsx";
+    "500彩票-比赛结束数据-" + state.date + " " + state.time + "分";
   option.fileName = filename;
   option.datas = [
     {
@@ -151,23 +162,6 @@ const deriveExcel = async () => {
   toExcel.saveExcel();
 };
 
-// 发送查询请求或下载请求的参数
-const queryForm = ref({
-  query: "",
-  pagenum: 1,
-  pagesize: 2,
-  value1: "",
-});
-
-// 查询数据
-const initgetGamesDataList = async () => {
-  const res = await find_data(queryForm.value);
-  tableData.value = res.data;
-};
-initgetGamesDataList();
-// 设置定时查询数据
-// setInterval(initgetGamesDataList, 5000);
-
 // 退出登录
 const logout = () => {
   store.dispatch("app/logout");
@@ -180,6 +174,6 @@ const logout = () => {
   margin-left: 20px;
 }
 .logout {
-  margin-left: 500px;
+  margin-left: 400px;
 }
 </style>

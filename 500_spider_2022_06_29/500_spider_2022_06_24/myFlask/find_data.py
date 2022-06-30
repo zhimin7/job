@@ -1,6 +1,11 @@
 import pymysql
 import time
 from datetime import datetime
+# host = 'localhost'
+# user = 'root'
+# passwd = '123456'
+# port = 3306
+# mydb='lottery'
 host = '175.178.14.211'
 user = 'lottery_500_2'
 passwd = '698350As?'
@@ -203,21 +208,21 @@ def find_endData(mytime):
         t_time = int(time.mktime(time.strptime(now_times, "%Y-%m-%d"))) + 3600 * 24
         yesterday_time = time.strftime("%Y-%m-%d", time.localtime(y_time)) + ' 00:00:00'
         now_time = time.strftime("%Y-%m-%d", time.localtime(t_time)) + ' 23:59:59'
-        sql = f'select fid, gamestime,delayed_time,spider_time,home_team,score,away_team,handicap,All_companies,BiFa,Matchbook,Leon,Betsson,mainstream_companines_3,mainstream_companines_1,Exchange from ((select * from now_data_end where  gamestime<="{now_time[5:16]}" and gamestime>="{yesterday_time[5:16]}") UNION ALL (select * from now_data_now where  gamestime<="{now_time[5:16]}" and gamestime>="{yesterday_time[5:16]}"))n order by gamestime ,fid,delayed_time;'
+        sql = f'select e.gamestime,e.home_team,e.score,e.away_team,n.handicap,n.All_companies,n.BiFa,n.Matchbook,n.Leon,n.Betsson,n.mainstream_companines_3,n.mainstream_companines_1,n.Exchange from now_data_end e, now_data_now n where e.fid=n.fid and e.gamestime<="{now_time[5:16]}" and e.gamestime>="{yesterday_time[5:16]}";'
         cursor.execute(sql)
         res = cursor.fetchall()
         mylist=[]
         for i in res:
-            mylist.append({'time':i[1],'spider_time':i[3],'home_team':i[4],'score':i[5],'away_team':i[6],'handicap':i[7],'All_companies':i[8],'BiFa':i[9],'Matchbook':i[10],'Leon':i[11],'Betsson':i[12],'mainstream_companines_3':i[13],'mainstream_companines_1':i[14],'Exchange':i[15]})
+            mylist.append({'time':i[0],'home_team':i[1],'score':i[2],'away_team':i[3],'handicap':i[4],'All_companies':i[5],'BiFa':i[6],'Matchbook':i[7],'Leon':i[8],'Betsson':i[9],'mainstream_companines_3':i[10],'mainstream_companines_1':i[11],'Exchange':i[12]})
         return mylist
 
     elif mytime!=[]:
-        sql = f'select fid, gamestime,delayed_time,spider_time,home_team,score,away_team,handicap,All_companies,BiFa,Matchbook,Leon,Betsson,mainstream_companines_3,mainstream_companines_1,Exchange from ((select * from now_data_now) UNION ALL (select * from now_data_end))n where  gamestime<="{mytime[1]}" and gamestime>="{mytime[0]}" order by gamestime ,fid,delayed_time;'
+        sql = f'select e.gamestime,e.home_team,e.score,e.away_team,n.handicap,n.All_companies,n.BiFa,n.Matchbook,n.Leon,n.Betsson,n.mainstream_companines_3,n.mainstream_companines_1,n.Exchange from now_data_end e, now_data_now n where e.fid=n.fid and e.gamestime<="{mytime[1]}" and e.gamestime>="{mytime[0]}";'
         cursor.execute(sql)
         res = cursor.fetchall()
         mylist=[]
         for i in res:
-            mylist.append({'time':i[1],'spider_time':i[3],'home_team':i[4],'score':i[5],'away_team':i[6],'handicap':i[7],'All_companies':i[8],'BiFa':i[9],'Matchbook':i[10],'Leon':i[11],'Betsson':i[12],'mainstream_companines_3':i[13],'mainstream_companines_1':i[14],'Exchange':i[15]})
+            mylist.append({'time':i[0],'home_team':i[1],'score':i[2],'away_team':i[3],'handicap':i[4],'All_companies':i[5],'BiFa':i[6],'Matchbook':i[7],'Leon':i[8],'Betsson':i[9],'mainstream_companines_3':i[10],'mainstream_companines_1':i[11],'Exchange':i[12]})
         return mylist
 
 # 登录验证
